@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil - GameForge{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Profil Utilisateur</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Informations de compte</h3>
+                        <hr>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <p class="fw-bold">Nom d'utilisateur:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{ user.username }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <p class="fw-bold">Email:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{ user.email }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <p class="fw-bold">Date d'inscription:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <p class="fw-bold">Utilisation de l'API:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{ user.profile.api_usage_count }} utilisation(s)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="{% url 'dashboard' %}" class="btn btn-primary mt-3">Aller au tableau de bord</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

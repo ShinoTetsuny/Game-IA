@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de bord - GameForge{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Tableau de bord</h1>
+        <p class="text-muted">Bienvenue {{ user.username }}! Gérez vos projets de jeux vidéo ici.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="#" class="btn btn-primary">Créer un nouveau jeu</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h2 class="h5 mb-0">Mes jeux</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <p class="mb-0">Vous n'avez pas encore de jeux. Cliquez sur "Créer un nouveau jeu" pour commencer!</p>
+                </div>
+                <!-- La liste des jeux sera affichée ici ultérieurement -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}GameForge - Créez votre jeu avec l'IA{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4">Bienvenue sur GameForge</h1>
+        <p class="lead">Créez des concepts de jeux vidéo originaux grâce à l'intelligence artificielle</p>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="card-title">Créez votre jeu de rêve</h2>
+                <p class="card-text">GameForge utilise l'intelligence artificielle pour vous aider à développer rapidement des concepts de jeux vidéo uniques et créatifs. Que vous soyez un développeur indépendant, un passionné de jeux ou simplement curieux, notre plateforme vous permet de:</p>
+                <ul>
+                    <li>Générer des univers de jeu cohérents</li>
+                    <li>Créer des histoires principales immersives</li>
+                    <li>Concevoir des personnages uniques</li>
+                    <li>Obtenir des illustrations conceptuelles</li>
+                </ul>
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary">Commencer à créer</a>
+                {% else %}
+                <a href="{% url 'signup' %}" class="btn btn-primary">Inscrivez-vous gratuitement</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="card-title">Comment ça marche</h2>
+                <p class="card-text">Notre système utilise des modèles d'IA avancés de Hugging Face pour générer des concepts de jeux vidéo personnalisés en quelques minutes:</p>
+                <ol>
+                    <li>Remplissez notre formulaire de création guidée</li>
+                    <li>Choisissez le genre, l'ambiance et les thèmes</li>
+                    <li>Laissez l'IA générer votre concept de jeu complet</li>
+                    <li>Obtenez des images conceptuelles générées par IA</li>
+                    <li>Sauvegardez et partagez votre création</li>
+                </ol>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Connexion</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2 class="mb-4">Des jeux uniques en quelques clics</h2>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h3>Univers de jeu</h3>
+                <p>Génération automatique d'un univers de jeu cohérent avec type, ambiance et style graphique.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h3>Histoire immersive</h3>
+                <p>Création d'un scénario structuré en 3 actes avec retournements narratifs.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h3>Personnages uniques</h3>
+                <p>Élaboration de personnages avec nom, classe, rôle narratif et histoire.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
