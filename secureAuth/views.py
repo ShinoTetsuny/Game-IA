@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
@@ -47,3 +47,7 @@ def login_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'secureAuth/profile.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
