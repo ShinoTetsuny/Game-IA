@@ -15,21 +15,22 @@ def dashboard_view(request):
     return render(request, 'GameForge/dashboard.html', {'games': games})
 
 def generate_view(request):
-    form = GameConceptForm(request.POST or None)
-
-    if request.method == "POST" and form.is_valid():
-        data = form.cleaned_data
-
-        game = generate_game_concept_for_user(
-            user=request.user,
-            genre=data["genre"],
-            ambiance=data["ambiance"],
-            themes=data["themes"],
-            references=data["references"]
-        )
-
-        return redirect("game_detail", game_id=game.id)  # Crée cette vue plus tard
-
+    if request.method == "POST":
+        form = GameConceptForm(request.POST)
+        if form.is_valid():
+            game = generate_game_concept_for_user(
+                request.user,
+                form.cleaned_data["genre"],
+                form.cleaned_data["ambiance"],
+                form.cleaned_data["themes"],
+                form.cleaned_data["references"]
+            )
+            if game:
+                return redirect("game_detail", game_id=game.id)
+            else:
+                form.add_error(None, "La génération a échoué. L'IA n'a pas retourné de JSON valide.")
+    else:
+        form = GameConceptForm()
     return render(request, "gameforge/generate.html", {"form": form})
 
 def game_detail(request, game_id):

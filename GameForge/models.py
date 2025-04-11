@@ -8,7 +8,8 @@ User = get_user_model()
 
 class GameConcept(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="game_concepts")
-    description = models.TextField()
+    title = models.TextField()
+    image = models.ImageField(upload_to="game_concepts/images/", blank=True, null=True)
     genre = models.CharField(max_length=100)
     ambiance = models.CharField(max_length=100)
     themes = models.TextField(help_text="Thèmes ou mots-clés")
