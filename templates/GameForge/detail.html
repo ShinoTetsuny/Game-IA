@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ game.title }}</title>
+    <link rel="stylesheet" href="{% static 'gameforge/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ game.title }}</h1>
+        <p><strong>Genre :</strong> {{ game.genre }}</p>
+        <p><strong>Ambiance :</strong> {{ game.ambiance }}</p>
+        <p><strong>Thèmes :</strong> {{ game.themes }}</p>
+        <p><strong>Références :</strong> {{ game.references }}</p>
+        <hr>
+        <h2>🌌 Univers</h2>
+        <p>{{ game.universe_description }}</p>
+
+        <h2>🎭 Histoire</h2>
+        {% for act in game.story_acts.all %}
+            <h3>Acte {{ act.act_number }} – {{ act.title }}</h3>
+            <p>{{ act.content }}</p>
+        {% endfor %}
+
+        <h2>🧙 Personnages</h2>
+        {% for character in game.characters.all %}
+            <h3>{{ character.name }}</h3>
+            <p><strong>Rôle :</strong> {{ character.role }}</p>
+            <p><strong>Capacités :</strong> {{ character.abilities }}</p>
+            <p><strong>Histoire :</strong> {{ character.background }}</p>
+        {% endfor %}
+
+        <h2>🏞️ Lieux</h2>
+        {% for location in game.locations.all %}
+            <h3>{{ location.name }}</h3>
+            <p>{{ location.description }}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Générer un Concept de Jeu</title>
+    <link rel="stylesheet" href="{% static 'gameforge/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Génère ton concept de jeu</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Lancer la génération</button>
+        </form>
+    </div>
+</body>
+</html>

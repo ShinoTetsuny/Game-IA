@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'game_ia_db',
         'USER': 'django_user',
-        'PASSWORD': 'mon_mot_de_passe',
+        'PASSWORD': os.getenv('DB_PASSWORD'),  # Use environment variable for password
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -89,6 +93,7 @@ DATABASES = {
     }
 }
 
+HUGGINGFACE_TOKEN = os.getenv('HUGGINGFACE_TOKEN')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
