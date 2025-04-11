@@ -1,40 +1,141 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ game.title }}</title>
-    <link rel="stylesheet" href="{% static 'gameforge/style.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1>{{ game.title }}</h1>
-        <p><strong>Genre :</strong> {{ game.genre }}</p>
-        <p><strong>Ambiance :</strong> {{ game.ambiance }}</p>
-        <p><strong>Thèmes :</strong> {{ game.themes }}</p>
-        <p><strong>Références :</strong> {{ game.references }}</p>
-        <hr>
-        <h2>🌌 Univers</h2>
-        <p>{{ game.universe_description }}</p>
+{% extends 'base.html' %}
 
-        <h2>🎭 Histoire</h2>
-        {% for act in game.story_acts.all %}
-            <h3>Acte {{ act.act_number }} – {{ act.title }}</h3>
-            <p>{{ act.content }}</p>
-        {% endfor %}
+{% block title %}{{ game.genre }} - {{ game.ambiance }} | GameForge{% endblock %}
 
-        <h2>🧙 Personnages</h2>
-        {% for character in game.characters.all %}
-            <h3>{{ character.name }}</h3>
-            <p><strong>Rôle :</strong> {{ character.role }}</p>
-            <p><strong>Capacités :</strong> {{ character.abilities }}</p>
-            <p><strong>Histoire :</strong> {{ character.background }}</p>
-        {% endfor %}
+{% block extra_css %}
+<style>
+    .game-section {
+        margin-bottom: 2rem;
+        border-radius: 5px;
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+    }
+    .game-section h2 {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        color: #343a40;
+    }
+    .character-card, .location-card {
+        border-left: 4px solid #007bff;
+        padding-left: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .game-meta {
+        background-color: #e9ecef;
+        border-radius: 5px;
+        padding: 1rem;
+    }
+    .story-act {
+        margin-bottom: 1.5rem;
+    }
+    .story-act h3 {
+        color: #495057;
+        border-bottom: 1px solid #ced4da;
+        padding-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
 
-        <h2>🏞️ Lieux</h2>
-        {% for location in game.locations.all %}
-            <h3>{{ location.name }}</h3>
-            <p>{{ location.description }}</p>
-        {% endfor %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>{{ game.genre }} - {{ game.ambiance }}</h1>
     </div>
-</body>
-</html>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">Retour au tableau de bord</a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="game-meta">
+            <div class="row">
+                <div class="col-md-3">
+                    <p class="mb-1"><strong>Genre :</strong></p>
+                    <p>{{ game.genre }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1"><strong>Ambiance :</strong></p>
+                    <p>{{ game.ambiance }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1"><strong>Thèmes :</strong></p>
+                    <p>{{ game.themes }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1"><strong>Créé le :</strong></p>
+                    <p>{{ game.created_at|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+            {% if game.references %}
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <p class="mb-1"><strong>Références :</strong></p>
+                    <p>{{ game.references }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="game-section">
+            <h2>🌌 Univers du jeu</h2>
+            <div class="universe-content">
+                {{ game.universe_description|linebreaks }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="game-section">
+            <h2>🎭 Histoire</h2>
+            {% for act in game.story_acts.all %}
+            <div class="story-act">
+                <h3>Acte {{ act.act_number }} – {{ act.title }}</h3>
+                <p>{{ act.content|linebreaks }}</p>
+            </div>
+            {% empty %}
+            <p>Aucun acte n'a été généré pour cette histoire.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="game-section">
+            <h2>🧙 Personnages</h2>
+            {% for character in game.characters.all %}
+            <div class="character-card">
+                <h3>{{ character.name }}</h3>
+                <p><strong>Rôle :</strong> {{ character.role }}</p>
+                <p><strong>Capacités :</strong> {{ character.abilities|linebreaks }}</p>
+                <p><strong>Histoire :</strong> {{ character.background|linebreaks }}</p>
+            </div>
+            {% empty %}
+            <p>Aucun personnage n'a été généré pour ce jeu.</p>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="game-section">
+            <h2>🏞️ Lieux</h2>
+            {% for location in game.locations.all %}
+            <div class="location-card">
+                <h3>{{ location.name }}</h3>
+                <p>{{ location.description|linebreaks }}</p>
+            </div>
+            {% empty %}
+            <p>Aucun lieu n'a été généré pour ce jeu.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,13 +3,13 @@ from django.conf import settings
 from huggingface_hub import InferenceClient
 from .models import GameConcept, StoryAct, Character, Location
 
+# Utiliser le token depuis settings.py
 client = InferenceClient(
     provider="novita",
-    api_key=""
-    )
+    api_key=settings.HUGGINGFACE_TOKEN
+)
 
 def generate_game_concept_for_user(user, genre, ambiance, themes, references):
-    print(client)
     print(f"Generating game concept for user {user.username}...")
     prompt = (
         f"Generate a game {genre} with an ambiance {ambiance}, "
@@ -29,58 +29,73 @@ def generate_game_concept_for_user(user, genre, ambiance, themes, references):
         "It should feels like a game concept document. "
     )
 
-    # Envoi à l'API
-    response = client.chat.completions.create(
-        model="deepseek-ai/DeepSeek-V3-0324",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    text = response.choices[0].message.content
-
-    # --- Parsing rudimentaire (exemple à adapter selon le format réel) ---
-    def extract_section(title, content):
-        pattern = rf"{title}.*?\n(.*?)\n(?:\w|\Z)"
-        match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
-        return match.group(1).strip() if match else ""
-
-    # Créer l'objet principal
-    game = GameConcept.objects.create(
-        user=user,
-        description=f"{genre} – {ambiance}",
-        genre=genre,
-        ambiance=ambiance,
-        themes=themes,
-        references=references,
-        universe_description=extract_section("Univers", text)
-    )
-
-    # Extraire les actes
-    act_matches = re.findall(r"(Acte\s\d+.*?)\n(.+?)\n(.*?)\n", text, re.DOTALL | re.IGNORECASE)
-    for i, (act_title, act_name, act_content) in enumerate(act_matches, start=1):
-        StoryAct.objects.create(
-            game=game,
-            act_number=i,
-            title=act_name.strip(),
-            content=act_content.strip()
+    try:
+        # Envoi à l'API
+        response = client.chat.completions.create(
+            model="deepseek-ai/DeepSeek-V3-0324",
+            messages=[{"role": "user", "content": prompt}]
         )
+        text = response.choices[0].message.content
+        
+        # --- Parsing rudimentaire (exemple à adapter selon le format réel) ---
+        def extract_section(title, content):
+            pattern = rf"{title}.*?\n(.*?)\n(?:\w|\Z)"
+            match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
+            return match.group(1).strip() if match else ""
+
+        # Créer l'objet principal
+        game = GameConcept.objects.create(
+            user=user,
+            description=f"{genre} – {ambiance}",
+            genre=genre,
+            ambiance=ambiance,
+            themes=themes,
+            references=references,
+            universe_description=extract_section("Univers", text)
+        )
+
+        # Extraire les actes
+        act_matches = re.findall(r"(Acte\s\d+.*?)\n(.+?)\n(.*?)\n", text, re.DOTALL | re.IGNORECASE)
+        for i, (act_title, act_name, act_content) in enumerate(act_matches, start=1):
+            StoryAct.objects.create(
+                game=game,
+                act_number=i,
+                title=act_name.strip(),
+                content=act_content.strip()
+            )
 
         # Personnages (à adapter si IA retourne une liste)
-    char_matches = re.findall(r"Nom : (.*?)\nRôle : (.*?)\nCapacités : (.*?)\nHistoire : (.*?)\n", text, re.DOTALL)
-    for name, role, abilities, background in char_matches:
-        Character.objects.create(
-            game=game,
-            name=name.strip(),
-            role=role.strip(),
-            abilities=abilities.strip(),
-            background=background.strip()
-        )
+        char_matches = re.findall(r"Nom : (.*?)\nRôle : (.*?)\nCapacités : (.*?)\nHistoire : (.*?)\n", text, re.DOTALL)
+        for name, role, abilities, background in char_matches:
+            Character.objects.create(
+                game=game,
+                name=name.strip(),
+                role=role.strip(),
+                abilities=abilities.strip(),
+                background=background.strip()
+            )
 
-    # Lieux
-    loc_matches = re.findall(r"Nom : (.*?)\nDescription : (.*?)\n", text, re.DOTALL)
-    for name, desc in loc_matches:
-        Location.objects.create(
-            game=game,
-            name=name.strip(),
-            description=desc.strip()
-        )
+        # Lieux
+        loc_matches = re.findall(r"Nom : (.*?)\nDescription : (.*?)\n", text, re.DOTALL)
+        for name, desc in loc_matches:
+            Location.objects.create(
+                game=game,
+                name=name.strip(),
+                description=desc.strip()
+            )
 
-    return game
+        return game
+        
+    except Exception as e:
+        print(f"Error generating game concept: {e}")
+        # En cas d'erreur, créer un concept de jeu minimal
+        game = GameConcept.objects.create(
+            user=user,
+            description=f"{genre} – {ambiance}",
+            genre=genre,
+            ambiance=ambiance,
+            themes=themes,
+            references=references,
+            universe_description="Une erreur est survenue lors de la génération du concept de jeu. Veuillez réessayer ultérieurement."
+        )
+        return game

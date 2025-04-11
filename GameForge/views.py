@@ -11,7 +11,8 @@ def home_view(request):
 
 @login_required
 def dashboard_view(request):
-    return render(request, 'GameForge/dashboard.html')
+    games = GameConcept.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'GameForge/dashboard.html', {'games': games})
 
 def generate_view(request):
     form = GameConceptForm(request.POST or None)
