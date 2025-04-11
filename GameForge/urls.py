@@ -6,4 +6,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('game/<int:game_id>/', views.game_detail, name='game_detail'),
     path('game/generate/', views.generate_view, name='generate_game'),
+    path('game/<int:game_id>/pdf/', views.export_game_pdf, name='export_game_pdf'),
 ] 

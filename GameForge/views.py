@@ -5,6 +5,11 @@ from .story_generation import generate_game_concept_for_user
 from .forms import GameConceptForm
 from .models import GameConcept, StoryAct, Character, Location
 from django.db.models import Count
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.conf import settings
+import os
 
 # Create your views here.
 
@@ -80,3 +85,28 @@ def generate_view(request):
 def game_detail(request, game_id):
     game = get_object_or_404(GameConcept, pk=game_id, user=request.user)
     return render(request, "gameforge/detail.html", {"game": game})
+
+@login_required
+def export_game_pdf(request, game_id):
+    game = get_object_or_404(GameConcept, pk=game_id, user=request.user)
+    
+    # Préparer le contexte pour le template PDF
+    context = {'game': game}
+    
+    # Obtenir le template HTML pour PDF
+    template = get_template('GameForge/pdf_detail.html')
+    html = template.render(context)
+    
+    # Créer la réponse HTTP avec le bon content type
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{game.title.replace(" ", "_")}_details.pdf"'
+    
+    # Convertir HTML en PDF avec xhtml2pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    
+    # Si la création du PDF a échoué, renvoyer l'erreur
+    if pisa_status.err:
+        return HttpResponse('Une erreur est survenue lors de la création du PDF.', status=400)
+    
+    return response

@@ -43,6 +43,9 @@
         <h1>{{ game.genre }} - {{ game.ambiance }}</h1>
     </div>
     <div class="col-md-4 text-end">
+        <a href="{% url 'export_game_pdf' game_id=game.id %}" class="btn btn-outline-danger me-2">
+            <i class="fas fa-file-pdf"></i> Exporter en PDF
+        </a>
         <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">Retour au tableau de bord</a>
     </div>
 </div>

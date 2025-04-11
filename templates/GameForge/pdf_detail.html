@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ game.title }} - Concept de jeu</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            margin: 2cm;
+        }
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            font-size: 24px;
+        }
+        h2 {
+            color: #0056b3;
+            font-size: 20px;
+            margin-top: 20px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #495057;
+            font-size: 18px;
+        }
+        .game-meta {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .game-section {
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .character-card, .location-card {
+            border-left: 3px solid #0056b3;
+            padding-left: 10px;
+            margin-bottom: 15px;
+        }
+        .story-act {
+            margin-bottom: 15px;
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10pt;
+            margin-top: 30px;
+            border-top: 1px solid #dee2e6;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ game.title }}</h1>
+    
+    <div class="game-meta">
+        <p><strong>Genre :</strong> {{ game.genre }}</p>
+        <p><strong>Ambiance :</strong> {{ game.ambiance }}</p>
+        <p><strong>Thèmes :</strong> {{ game.themes }}</p>
+        <p><strong>Créé le :</strong> {{ game.created_at|date:"d/m/Y" }}</p>
+        {% if game.references %}
+        <p><strong>Références :</strong> {{ game.references }}</p>
+        {% endif %}
+    </div>
+    
+    <div class="game-section">
+        <h2>🌌 Univers du jeu</h2>
+        <div class="universe-content">
+            {{ game.universe_description|linebreaks }}
+        </div>
+    </div>
+    
+    {% if game.image %}
+    <div class="game-section">
+        <h2>🎨 Illustration du jeu</h2>
+        <div class="image-content">
+            <img src="{{ game.image.url }}" alt="Concept art du jeu">
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="game-section">
+        <h2>🎭 Histoire</h2>
+        {% for act in game.story_acts.all %}
+        <div class="story-act">
+            <h3>Acte {{ act.act_number }} – {{ act.title }}</h3>
+            <p>{{ act.content|linebreaks }}</p>
+        </div>
+        {% empty %}
+        <p>Aucun acte n'a été généré pour cette histoire.</p>
+        {% endfor %}
+    </div>
+    
+    <div class="game-section">
+        <h2>🧙 Personnages</h2>
+        {% for character in game.characters.all %}
+        <div class="character-card">
+            <h3>{{ character.name }}</h3>
+            <p><strong>Rôle :</strong> {{ character.role }}</p>
+            <p><strong>Capacités :</strong> {{ character.abilities|linebreaks }}</p>
+            <p><strong>Histoire :</strong> {{ character.background|linebreaks }}</p>
+        </div>
+        {% empty %}
+        <p>Aucun personnage n'a été généré pour ce jeu.</p>
+        {% endfor %}
+    </div>
+    
+    <div class="game-section">
+        <h2>🏞️ Lieux</h2>
+        {% for location in game.locations.all %}
+        <div class="location-card">
+            <h3>{{ location.name }}</h3>
+            <p>{{ location.description|linebreaks }}</p>
+        </div>
+        {% empty %}
+        <p>Aucun lieu n'a été généré pour ce jeu.</p>
+        {% endfor %}
+    </div>
+    
+    <div class="footer">
+        <p>Document généré par GameForge - © {{ game.created_at|date:"Y" }}</p>
+    </div>
+</body>
+</html> 

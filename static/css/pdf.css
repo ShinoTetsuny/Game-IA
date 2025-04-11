@@ -1,0 +1,72 @@
+/* Styles pour le PDF */
+body {
+    font-family: "Helvetica", Arial, sans-serif;
+    line-height: 1.4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 10px;
+    font-size: 24px;
+}
+
+h2 {
+    color: #0056b3;
+    font-size: 20px;
+    margin-top: 20px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+}
+
+h3 {
+    color: #495057;
+    font-size: 18px;
+}
+
+.game-meta {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.game-section {
+    margin-bottom: 20px;
+    padding: 10px;
+    page-break-inside: avoid;
+}
+
+.character-card, .location-card {
+    border-left: 3px solid #0056b3;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+}
+
+.story-act {
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+}
+
+img {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+@page {
+    margin: 2cm;
+    @top-center {
+        content: "GameForge - Concept de jeu";
+        font-size: 10pt;
+    }
+    @bottom-center {
+        content: "Page " counter(page) " sur " counter(pages);
+        font-size: 10pt;
+    }
+} 
