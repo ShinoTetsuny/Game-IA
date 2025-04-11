@@ -94,12 +94,18 @@
 <div class="row">
     <div class="col-md-12">
         <div class="game-section">
-            <div class="mechanics-content">
-                <img src="{{game.image}}" alt="">
+            <h2>🎨 Illustration du jeu</h2>
+            <div class="mechanics-content text-center">
+                {% if game.image %}
+                    <img src="/media/{{game.image}}" alt="Concept art du jeu" class="img-fluid rounded" style="max-height: 500px;">
+                {% else %}
+                    <div class="alert alert-info">
+                        <p class="mb-0">Aucune illustration n'a été générée pour ce jeu.</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="row">

@@ -8,6 +8,11 @@ from .forms import SignUpForm
 # Create your views here.
 
 def signup_view(request):
+    # Rediriger les utilisateurs déjà connectés
+    if request.user.is_authenticated:
+        messages.info(request, "Vous êtes déjà connecté!")
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -26,6 +31,11 @@ def signup_view(request):
     return render(request, 'secureAuth/signup.html', {'form': form})
 
 def login_view(request):
+    # Rediriger les utilisateurs déjà connectés
+    if request.user.is_authenticated:
+        messages.info(request, "Vous êtes déjà connecté!")
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():

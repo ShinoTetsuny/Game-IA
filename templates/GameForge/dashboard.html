@@ -9,7 +9,29 @@
         <p class="text-muted">Bienvenue {{ user.username }}! Gérez vos projets de jeux vidéo ici.</p>
     </div>
     <div class="col-md-4 text-end">
-        <a href="{% url 'generate_game' %}" class="btn btn-primary">Créer un nouveau jeu</a>
+        {% if remaining_games > 0 %}
+            <a href="{% url 'generate_game' %}" class="btn btn-primary">Créer un nouveau jeu</a>
+        {% else %}
+            <button class="btn btn-secondary" disabled>Limite de génération atteinte</button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <div class="row">
+                <div class="col-md-4">
+                    <p class="mb-0"><strong>Jeux créés:</strong> {{ games_count }} / {{ max_games }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-0"><strong>Générations restantes:</strong> {{ remaining_games }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-0"><strong>Utilisation API:</strong> {{ user.profile.api_usage_count }} requête(s)</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

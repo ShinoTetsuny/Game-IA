@@ -23,7 +23,10 @@
                     <li>Obtenir des illustrations conceptuelles</li>
                 </ul>
                 {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="btn btn-primary">Commencer à créer</a>
+                <a href="{% url 'dashboard' %}" class="btn btn-primary">Accéder à mon tableau de bord</a>
+                {% if remaining_games > 0 %}
+                <a href="{% url 'generate_game' %}" class="btn btn-success ms-2">Créer un nouveau jeu ({{ remaining_games }} restant{% if remaining_games > 1 %}s{% endif %})</a>
+                {% endif %}
                 {% else %}
                 <a href="{% url 'signup' %}" class="btn btn-primary">Inscrivez-vous gratuitement</a>
                 {% endif %}
